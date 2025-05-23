@@ -1,9 +1,10 @@
 import streamlit as st
+import random
 
 # --- 1. 스토리 노드 정의 (게임의 핵심 데이터) ---
 # 각 노드는 'text'와 'choices'를 가짐
 # 'choices'는 {선택지 텍스트: 다음 노드 ID} 형태의 딕셔너리
-# 특수 키워드: '__END__'는 게임 종료를 의미
+# 특수 키워드: '__END__'는 게임 종료를 의미 (여기서는 사용하지 않음)
 #            '__WIN__'은 승리 엔딩을 의미
 #            '__LOSE__'는 패배 엔딩을 의미
 #            '__ITEM_GET_KEY__': 아이템 획득 조건 ('아이템 이름': '다음 노드 ID')
@@ -226,7 +227,7 @@ if st.session_state.game_over:
         st.session_state.current_node = "start"
         st.session_state.inventory = []
         st.session_state.game_over = False
-        st.experimental_rerun() # 앱을 새로고침하여 초기 상태로 돌아감
+        st.rerun() # 변경된 부분: st.experimental_rerun() -> st.rerun()
     
     st.stop() # 게임 오버 시 더 이상 진행하지 않음
 
@@ -246,9 +247,9 @@ else:
 for choice_text, next_node_id in current_node['choices'].items():
     if st.button(choice_text):
         # 특수 키워드 처리
-        if next_node_id == "__END__":
+        if next_node_id == "__END__": # 이 예시에서는 사용되지 않음
             st.session_state.game_over = True
-            st.session_state.current_node = "end_node" # 실제 없는 노드이므로 처리 필요
+            st.session_state.current_node = "end_node"
         elif next_node_id == "__WIN__":
             st.session_state.game_over = True
             st.session_state.current_node = "__WIN__"
@@ -274,4 +275,4 @@ for choice_text, next_node_id in current_node['choices'].items():
             # 일반적인 다음 노드로 이동
             st.session_state.current_node = next_node_id
         
-        st.experimental_rerun() # 선택 후 화면 새로고침
+        st.rerun() # 변경된 부분: st.experimental_rerun() -> st.rerun()
